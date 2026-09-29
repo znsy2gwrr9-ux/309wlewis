@@ -381,12 +381,12 @@ const LISTING = {
     "https://cdn.listingphotos.sierrastatic.com/large/v1790392794/68/68_PTP2607248_36.jpg"
   ],
   contact: {
-    name: "Maria Pena",
+    name: "Maria Peña",
     role: "Listing agent, Keller Williams San Diego Metro",
-    license: "",
+    license: "01361665 / 01295699",
     brokerage: "Keller Williams San Diego Metro",
     phone: "619-517-8625",
-    email: ""
+    email: "mpenarealtor@gmail.com"
   }
 };
 
@@ -465,7 +465,7 @@ function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<
     "<div><h3>" + ph(c.name) + "</h3><p>" + ph(c.role) + (c.license ? "<br>DRE #" + esc(c.license) : "") + "</p></div>" +
     "<div>" + phoneLink + emailLink + "</div>";
 
-  $("footer").textContent = "Listing courtesy of " + c.brokerage + (L.mls ? ", MLS# " + L.mls : "") + ". Details are believed accurate but are not guaranteed; please verify anything important.";
+  $("footer").textContent = "Listing courtesy of " + c.brokerage + (c.license ? ", DRE #" + c.license : "") + (L.mls ? ", MLS# " + L.mls : "") + ". Details are believed accurate but are not guaranteed; please verify anything important.";
 })();
 
 /* ============================ QR code ============================ */
