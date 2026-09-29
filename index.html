@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Home for sale</title>
+<meta name="description" content="Home for sale, with financing information for doctors, dentists, veterinarians, and other medical professionals.">
+<style>
+  :root {
+    color-scheme: light;
+    --cream: #FAF9F2;
+    --olive-light: #E6EBCF;
+    --olive-mid: #C6D09E;
+    --olive: #6B7A3A;
+    --olive-dark: #4F5C28;
+    --text: #3D3929;
+    --muted: #625D49;
+    --line: #D9DCC3;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: "Avenir Next", Avenir, "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--olive-light); color: var(--text); font-family: var(--sans); font-size: 1.0625rem; line-height: 1.65; }
+  a { color: var(--olive-dark); text-underline-offset: 3px; }
+  a:hover { color: var(--text); }
+  :focus-visible { outline: 3px solid var(--olive); outline-offset: 3px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+/* Top bar */
+.bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; padding: 16px max(24px, calc((100vw - 1040px) / 2 + 24px)); background: var(–olive-dark); color: #FFFFFF; }
+.bar strong { font-family: var(–serif); font-size: 1.15rem; font-weight: 700; color: #FFFFFF; }
+.bar nav { display: flex; gap: 24px; font-size: 1rem; font-weight: 600; }
+.bar nav a { color: #FFFFFF; text-decoration: none; border-bottom: 2px solid transparent; padding-bottom: 2px; }
+.bar nav a:hover { border-bottom-color: #E6EBCF; color: #FFFFFF; }
+
+/* Hero */
+.hero { background: var(–olive-light); padding: 48px 0 64px; }
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.hero h1 { font-family: var(–serif); font-weight: 700; font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.1; margin: 0 0 8px; color: var(–text); }
+.hero .city { font-size: 1.2rem; font-weight: 500; margin: 0 0 24px; color: var(–muted); }
+.hero .price { font-family: var(–serif); font-size: clamp(1.7rem, 3.6vw, 2.3rem); font-weight: 700; color: var(–olive-dark); margin: 0; }
+.hero .facts { margin: 6px 0 0; font-size: 1.15rem; font-weight: 500; color: var(–text); }
+.hero .open { margin: 18px 0 0; font-weight: 600; border-left: 4px solid var(–olive); padding-left: 12px; }
+.hero .cta { display: inline-block; margin-top: 28px; background: var(–olive); color: #fff; padding: 13px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; }
+.hero .cta:hover { background: var(–olive-dark); color: #fff; }
+.photo { width: 100%; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden; background-size: cover; background-position: center; background-color: var(–olive-mid); }
+.photo.empty { display: grid; place-items: center; background: linear-gradient(180deg, #D5DDB4 0%, #EEF0DC 100%); }
+.photo.empty svg { width: 70%; display: block; }
+.ph-note { margin: 12px 0 0; font-size: .85rem; color: var(–muted); }
+
+/* Sections */
+section { padding: 64px 0; background: var(–cream); }
+h2 { font-family: var(–serif); font-weight: 700; font-size: clamp(1.6rem, 3.2vw, 2.1rem); line-height: 1.2; margin: 0 0 18px; }
+h3 { font-family: var(–serif); font-weight: 700; font-size: 1.2rem; margin: 0 0 6px; }
+p { margin: 0 0 1em; max-width: 62ch; }
+
+/* Details */
+.details-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: start; }
+dl.spec { margin: 0; border-top: 2px solid var(–olive); }
+dl.spec div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(–line); }
+dl.spec dt { color: var(–muted); }
+dl.spec dd { margin: 0; font-weight: 600; text-align: right; }
+ul.highlights { padding-left: 1.2em; margin: 0 0 1em; }
+ul.highlights li { margin-bottom: 6px; padding-left: 4px; }
+ul.highlights li::marker { color: var(–olive); }
+
+/* Gallery */
+.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.gallery figure { margin: 0; aspect-ratio: 4 / 3; background: var(–olive-light); border: 1px dashed var(–olive-mid); border-radius: 8px; display: grid; place-items: center; color: var(–muted); font-size: .95rem; text-align: center; padding: 12px; overflow: hidden; }
+.gallery figure.filled { border: 0; padding: 0; }
+.gallery:not(.open) figure.extra { display: none; }
+.gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.more { margin-top: 18px; font: inherit; font-weight: 600; background: transparent; color: var(–olive-dark); border: 2px solid var(–olive); padding: 10px 18px; border-radius: 6px; cursor: pointer; }
+.more:hover { background: var(–olive); color: #fff; }
+
+/* Financing */
+#financing { background: var(–olive-light); }
+.fin-top { display: grid; grid-template-columns: 1.5fr 1fr; gap: 48px; align-items: start; }
+.sign { background: #fff; border: 1px solid var(–olive-mid); border-radius: 14px; padding: 28px; text-align: center; }
+.sign h3 { font-size: 1.3rem; }
+.sign p { margin: 0 auto 16px; font-size: .96rem; color: var(–muted); max-width: 30ch; }
+.qr-box { background: #fff; padding: 12px; display: inline-block; border: 1px solid var(–line); border-radius: 8px; min-width: 212px; min-height: 212px; }
+.qr-box img, .qr-box canvas { display: block; }
+.qr-empty { width: 180px; height: 180px; display: grid; place-items: center; color: var(–muted); font-size: .9rem; }
+.qr-caption { margin: 12px auto 0; font-size: .9rem; color: var(–muted); }
+.tools { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(–line); text-align: left; font-size: .92rem; }
+.tools label { display: block; margin-bottom: 6px; }
+.tools input { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(–olive-mid); font: inherit; color: var(–text); background: #fff; }
+.tools .row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.tools button { font: inherit; font-weight: 600; padding: 9px 14px; border-radius: 6px; border: 1px solid var(–olive); background: transparent; color: var(–olive-dark); cursor: pointer; }
+.tools button.primary { background: var(–olive); color: #fff; }
+.tools button:hover { background: var(–olive-dark); color: #fff; }
+.tools .msg { margin: 10px 0 0; min-height: 1.3em; color: var(–muted); }
+
+table.compare { border-collapse: collapse; width: 100%; margin: 44px 0 8px; background: var(–cream); border-radius: 8px; overflow: hidden; }
+table.compare caption { text-align: left; font-family: var(–serif); font-size: 1.2rem; font-weight: 700; padding-bottom: 10px; }
+table.compare th, table.compare td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(–line); vertical-align: top; }
+table.compare thead th { border-bottom: 2px solid var(–olive); font-weight: 700; }
+table.compare tbody th { font-weight: 600; width: 22%; }
+
+.programs { list-style: none; margin: 16px 0 0; padding: 0; border-top: 2px solid var(–olive); }
+.programs li { padding: 18px 0; border-bottom: 1px solid var(–olive-mid); display: grid; grid-template-columns: 240px 1fr; gap: 8px 32px; }
+.programs .name { font-family: var(–serif); font-weight: 700; font-size: 1.1rem; }
+.programs p { margin: 0 0 4px; }
+.programs .who { color: var(–muted); font-size: .95rem; }
+
+.know { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+.know ul { margin: 8px 0 0; padding-left: 1.2em; }
+.know li { margin-bottom: 8px; max-width: 58ch; }
+.know li::marker { color: var(–olive); }
+
+.disclaimer { margin-top: 32px; font-size: .9rem; color: var(–muted); max-width: 78ch; }
+
+/* Contact */
+.contact-card { border-top: 2px solid var(–olive); padding-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.contact-card a.big { font-family: var(–serif); font-size: 1.5rem; display: block; margin-bottom: 4px; }
+footer { padding: 28px 24px 44px; text-align: center; font-size: .88rem; color: var(–muted); background: var(–cream); border-top: 1px solid var(–line); }
+
+.ph { background: #F1EBB8; padding: 0 3px; border-radius: 2px; color: var(–text); }
+
+@media (max-width: 820px) {
+.hero-grid, .details-grid, .fin-top, .know, .contact-card { grid-template-columns: 1fr; gap: 28px; }
+.hero { padding-bottom: 48px; }
+.gallery { grid-template-columns: 1fr 1fr; }
+.programs li { grid-template-columns: 1fr; }
+section { padding: 48px 0; }
+.bar nav { gap: 14px; }
+table.compare th, table.compare td { padding: 10px 8px; font-size: .95rem; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+
+</head>
+<body>
+
+<div class="bar">
+  <strong id="barAddress">Home for sale</strong>
+  <nav aria-label="Page sections">
+    <a href="#details">Details</a>
+    <a href="#financing">Financing</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</div>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <h1 id="address"></h1>
+      <p class="city" id="cityLine"></p>
+      <p class="price" id="price"></p>
+      <p class="facts" id="facts"></p>
+      <p class="open" id="openHouse" hidden></p>
+      <a class="cta" href="#financing">See financing for medical professionals</a>
+    </div>
+    <div class="photo-wrap">
+      <div class="photo" id="heroPhoto" role="img" aria-label="Front of the house"></div>
+      <p class="ph-note" id="phNote" hidden>Add your photos in the LISTING settings near the bottom of this file.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="details" aria-labelledby="detailsHeading">
+  <div class="wrap details-grid">
+    <div>
+      <h2 id="detailsHeading">About the home</h2>
+      <p id="summary"></p>
+      <ul class="highlights" id="highlights"></ul>
+      <p id="showingNote"></p>
+    </div>
+    <dl class="spec" id="spec"></dl>
+  </div>
+</section>
+
+<section aria-labelledby="galleryHeading" style="padding-top:0">
+  <div class="wrap">
+    <h2 id="galleryHeading">Photos</h2>
+    <div class="gallery" id="gallery"></div>
+  </div>
+</section>
+
+<section id="financing" aria-labelledby="finHeading">
+  <div class="wrap">
+    <div class="fin-top">
+      <div>
+        <h2 id="finHeading">Buying as a medical professional?</h2>
+        <p>Doctors, dentists, veterinarians, and other healthcare professionals can often qualify for special mortgage programs, commonly called doctor loans or physician loans. They are built for people with high earning potential, large student loan balances, and little time to save a big down payment.</p>
+        <p>Below is a plain-language look at how these loans work and a few programs to ask about. Eligibility differs by lender, so check that your specific license or degree is covered.</p>
+      </div>
+      <aside class="sign" aria-label="QR code for this page">
+        <h3>Scan for loan options</h3>
+        <p>Point your phone camera at the code to open this financing guide.</p>
+        <div class="qr-box" id="qrBox"><div class="qr-empty">QR code appears here</div></div>
+        <p class="qr-caption">Medical professional financing</p>
+        <div class="tools" id="tools" hidden>
+          <label for="siteUrl">Seller tools: your live website address</label>
+          <input id="siteUrl" type="text" placeholder="https://your-site.example.com" inputmode="url" autocomplete="off">
+          <div class="row">
+            <button type="button" class="primary" id="makeQr">Update QR code</button>
+            <button type="button" id="downloadQr">Download PNG</button>
+          </div>
+          <p class="msg" id="qrMsg" role="status"></p>
+        </div>
+      </aside>
+    </div>
+
+```
+<table class="compare">
+  <caption>How a doctor loan compares</caption>
+  <thead>
+    <tr><th scope="col"></th><th scope="col">Standard mortgage</th><th scope="col">Doctor loan</th></tr>
+  </thead>
+  <tbody>
+    <tr><th scope="row">Down payment</th><td>Often 5% to 20%</td><td>0% to 5% is common</td></tr>
+    <tr><th scope="row">Mortgage insurance</th><td>Usually required with less than 20% down</td><td>Often waived, even with little down</td></tr>
+    <tr><th scope="row">Student loans</th><td>Payment counts toward your debt-to-income ratio</td><td>Deferred loans may be excluded, or your income-driven payment is used</td></tr>
+    <tr><th scope="row">Loan size</th><td>Conforming loan limits</td><td>Many programs go to $1 million or more</td></tr>
+    <tr><th scope="row">Home use</th><td>Primary, second, or investment</td><td>Primary residence only, in most programs</td></tr>
+  </tbody>
+</table>
+
+<h3 style="margin-top:44px">Programs to ask about</h3>
+<ul class="programs">
+  <li>
+    <span class="name"><a href="https://www.cmgfi.com/blog/say-hello-to-medpro-premier-100-financing-for-medical-professionals-2026-03-12" target="_blank" rel="noopener">CMG Financial MedPro</a></span>
+    <div>
+      <p>MedPro Advantage allows as little as 5% down with no mortgage insurance. MedPro Premier offers 100% financing for eligible professions. Both go up to $2 million and can exclude deferred student loans from your debt-to-income ratio.</p>
+      <p class="who">Advantage covers a wider range of medical occupations than Premier.</p>
+    </div>
+  </li>
+  <li>
+    <span class="name"><a href="https://www.bankofamerica.com/mortgage/doctor-loan/" target="_blank" rel="noopener">Bank of America Doctor Loan</a></span>
+    <div>
+      <p>3% down up to $850,000, 5% down up to $1 million, 10% down up to $1.5 million, and 15% down up to $2 million.</p>
+      <p class="who">Licensed and practicing doctors and dentists, residents and fellows, and other eligible medical professionals.</p>
+    </div>
+  </li>
+  <li>
+    <span class="name"><a href="https://www.regions.com/personal-banking/home-loans/mortgage/home-loan-options/physicians-emerging-professional-mortgage" target="_blank" rel="noopener">Regions Bank</a></span>
+    <div>
+      <p>A Doctor Loan program for physicians at any stage of their career, plus an Emerging Professionals Program for professionals with up to 7 years in their field.</p>
+      <p class="who">Emerging Professionals covers pharmacists, nurse anesthetists, PAs, NPs, veterinarians, chiropractors, optometrists, and podiatrists.</p>
+    </div>
+  </li>
+  <li>
+    <span class="name">FNBO</span>
+    <div>
+      <p>0% down up to $850,000, and 5% down up to $1.25 million.</p>
+      <p class="who">Veterinarians and many other high-income professions.</p>
+    </div>
+  </li>
+  <li>
+    <span class="name">Old National Bank</span>
+    <div>
+      <p>0% down up to $750,000.</p>
+      <p class="who">Includes veterinarians.</p>
+    </div>
+  </li>
+  <li>
+    <span class="name">Fulton Mortgage</span>
+    <div>
+      <p>Financing up to $3 million.</p>
+      <p class="who">Pharmacists, veterinarians, and podiatrists.</p>
+    </div>
+  </li>
+</ul>
+
+<div class="know">
+  <div>
+    <h3>What lenders usually ask for</h3>
+    <ul>
+      <li>Proof of your license or degree, or of residency or fellowship enrollment</li>
+      <li>An employment contract or offer letter, plus recent pay stubs if you have them</li>
+      <li>Student loan statements, including income-driven repayment details</li>
+      <li>A credit score of roughly 660 to 700 or higher, depending on the program</li>
+    </ul>
+  </div>
+  <div>
+    <h3>Worth knowing before you apply</h3>
+    <ul>
+      <li>Rates can run slightly higher than a standard mortgage, so compare quotes</li>
+      <li>Some programs limit eligibility to the first 7 to 10 years of practice</li>
+      <li>Lenders do not all operate in every state, so confirm availability where this home is located</li>
+      <li>Financing 100% of a home means a larger balance and more interest over time</li>
+    </ul>
+  </div>
+</div>
+
+<p class="disclaimer">This page is general information from the home seller. The seller is not a lender, mortgage broker, or financial advisor and is not affiliated with the lenders listed. Program terms, limits, and eligibility change, so confirm current details directly with each lender. Information last reviewed September 2026.</p>
+```
+
+  </div>
+</section>
+
+<section id="contact" aria-labelledby="contactHeading">
+  <div class="wrap">
+    <h2 id="contactHeading">Schedule a showing</h2>
+    <div class="contact-card" id="contactCard"></div>
+  </div>
+</section>
+</main>
+
+<footer id="footer"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+/* ============================================================
+   LISTING SETTINGS: edit everything in this block.
+   Anything left in [brackets] shows up highlighted so you can
+   spot what still needs filling in.
+   Photos: paste image addresses (or file names like "photos/front.jpg"
+   if you upload the images next to this file). The first photo is
+   the big one at the top.
+   ============================================================ */
+const LISTING = {
+  address: "309 W Lewis St",
+  cityLine: "Mission Hills, San Diego, CA 92103",
+  price: "$1,125,000",
+  beds: "3",
+  baths: "3",
+  sqft: "1,319",
+  lot: "",
+  yearBuilt: "1998",
+  propertyType: "Detached single-family home",
+  stories: "2",
+  parking: "1 space",
+  view: "Panoramic, neighborhood, and city lights",
+  mls: "PTP2607248",
+  openHouse: "",
+  summary: "A detached three-bedroom, three-bath home in sought-after Mission Hills. The first-floor bedroom and full bath work well for guests, extended family, a private office, or single-level living. Inside you'll find warm wood flooring, plantation-style shutters, central heating and air conditioning, and a kitchen with granite counters, white cabinetry, and newer stainless steel appliances. Cafes, restaurants, and boutiques in Mission Hills and Hillcrest are close by.",
+  highlights: [
+    "First-floor bedroom and full bathroom",
+    "Warm wood flooring and plantation-style shutters",
+    "Kitchen with granite counters, white cabinets, and newer stainless steel appliances",
+    "Central heating and air conditioning",
+    "Panoramic and city-light views",
+    "Convenient to UC San Diego Hospital, Balboa Park, Downtown, Mission Bay, and the freeways"
+  ],
+  showingNote: "Showings are by appointment.",
+  tourUrl: "",
+  photos: [
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392778/68/68_PTP2607248_01.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392778/68/68_PTP2607248_02.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392779/68/68_PTP2607248_03.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392779/68/68_PTP2607248_04.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392780/68/68_PTP2607248_05.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392780/68/68_PTP2607248_06.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392781/68/68_PTP2607248_07.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392781/68/68_PTP2607248_08.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392781/68/68_PTP2607248_09.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392782/68/68_PTP2607248_10.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392782/68/68_PTP2607248_11.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392783/68/68_PTP2607248_12.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392783/68/68_PTP2607248_13.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392784/68/68_PTP2607248_14.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392784/68/68_PTP2607248_15.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392785/68/68_PTP2607248_16.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392785/68/68_PTP2607248_17.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392786/68/68_PTP2607248_18.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392786/68/68_PTP2607248_19.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392786/68/68_PTP2607248_20.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392787/68/68_PTP2607248_21.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392787/68/68_PTP2607248_22.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392788/68/68_PTP2607248_23.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392788/68/68_PTP2607248_24.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392789/68/68_PTP2607248_25.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392789/68/68_PTP2607248_26.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392790/68/68_PTP2607248_27.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392790/68/68_PTP2607248_28.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392791/68/68_PTP2607248_29.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392791/68/68_PTP2607248_30.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392792/68/68_PTP2607248_31.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392792/68/68_PTP2607248_32.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392793/68/68_PTP2607248_33.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392793/68/68_PTP2607248_34.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392794/68/68_PTP2607248_35.jpg",
+    "https://cdn.listingphotos.sierrastatic.com/large/v1790392794/68/68_PTP2607248_36.jpg"
+  ],
+  contact: {
+    name: "Maria Pena",
+    role: "Listing agent, Keller Williams San Diego Metro",
+    license: "",
+    brokerage: "Keller Williams San Diego Metro",
+    phone: "619-517-8625",
+    email: ""
+  }
+};
+
+/* ============================ Rendering ============================ */
+const $ = (id) => document.getElementById(id);
+const isPlaceholder = (v) => typeof v === "string" && v.trim().startsWith("[");
+function ph(v) { return isPlaceholder(v) ? '<span class="ph">' + esc(v) + '</span>' : esc(v); }
+function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+(function render() {
+  const L = LISTING;
+  $("barAddress").textContent = isPlaceholder(L.address) ? "Home for sale" : L.address;
+  document.title = isPlaceholder(L.address) ? "Home for sale" : L.address + " | Home for sale";
+  $("address").innerHTML = ph(L.address);
+  $("cityLine").innerHTML = ph(L.cityLine);
+  $("price").innerHTML = "Offered at " + ph(L.price);
+  $("facts").innerHTML = ph(L.beds) + " bedrooms, " + ph(L.baths) + " bathrooms, " + ph(L.sqft) + " sq ft";
+  if (L.openHouse) { $("openHouse").hidden = false; $("openHouse").textContent = "Open house: " + L.openHouse; }
+  $("summary").innerHTML = ph(L.summary);
+  $("highlights").innerHTML = L.highlights.map((h) => "<li>" + ph(h) + "</li>").join("");
+  $("showingNote").textContent = L.showingNote;
+
+  const specs = [
+    ["Property type", L.propertyType],
+    ["Bedrooms", L.beds],
+    ["Bathrooms", L.baths],
+    ["Living area", L.sqft ? L.sqft + " sq ft" : ""],
+    ["Lot size", L.lot],
+    ["Year built", L.yearBuilt],
+    ["Stories", L.stories],
+    ["Parking", L.parking],
+    ["View", L.view],
+    ["MLS number", L.mls]
+  ].filter((row) => row[1]);
+  $("spec").innerHTML = specs.map((s) => "<div><dt>" + esc(s[0]) + "</dt><dd>" + ph(s[1]) + "</dd></div>").join("");
+
+  // Hero photo
+  const hero = $("heroPhoto");
+  if (L.photos.length) {
+    hero.style.backgroundImage = 'url("' + L.photos[0] + '")';
+  } else {
+    hero.classList.add("empty");
+    hero.innerHTML = '<svg viewBox="0 0 200 130" aria-hidden="true"><rect x="0" y="112" width="200" height="18" fill="#DDE3C0"/><rect x="34" y="60" width="132" height="54" fill="#FFFFFF" stroke="#8A8F6C" stroke-width="1.5"/><path d="M24 64 L100 26 L176 64 Z" fill="#B7C285" stroke="#8A8F6C" stroke-width="1.5" stroke-linejoin="round"/><rect x="88" y="82" width="24" height="32" fill="#6B7A3A"/><rect x="46" y="78" width="22" height="20" fill="#E6EBCF" stroke="#8A8F6C" stroke-width="1.5"/><rect x="132" y="78" width="22" height="20" fill="#E6EBCF" stroke="#8A8F6C" stroke-width="1.5"/></svg>';
+    $("phNote").hidden = false;
+  }
+
+  // Gallery: show real photos, or three placeholder tiles
+  const rest = L.photos.slice(1);
+  if (rest.length) {
+    $("gallery").innerHTML = rest.map((p, i) => '<figure class="filled' + (i >= 8 ? ' extra' : '') + '"><img src="' + esc(p) + '" alt="Home photo ' + (i + 2) + '" loading="lazy"></figure>').join("");
+    if (rest.length > 8) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "more";
+      btn.textContent = "Show all " + L.photos.length + " photos";
+      btn.addEventListener("click", () => {
+        const open = $("gallery").classList.toggle("open");
+        btn.textContent = open ? "Show fewer photos" : "Show all " + L.photos.length + " photos";
+      });
+      $("gallery").after(btn);
+    }
+  } else {
+    $("gallery").innerHTML = [1, 2, 3].map(() => "<figure>Add a photo</figure>").join("");
+  }
+
+  // Virtual tour link
+  if (L.tourUrl) {
+    $("showingNote").insertAdjacentHTML("afterend", '<p><a href="' + esc(L.tourUrl) + '" target="_blank" rel="noopener">Take the virtual tour</a></p>');
+  }
+
+  // Contact
+  const c = L.contact;
+  const phoneLink = isPlaceholder(c.phone) ? ph(c.phone) : '<a class="big" href="tel:' + esc(c.phone.replace(/[^\d+]/g, "")) + '">' + esc(c.phone) + "</a>";
+  const emailLink = !c.email ? "" : (isPlaceholder(c.email) ? ph(c.email) : '<a class="big" href="mailto:' + esc(c.email) + '">' + esc(c.email) + "</a>");
+  $("contactCard").innerHTML =
+    "<div><h3>" + ph(c.name) + "</h3><p>" + ph(c.role) + (c.license ? "<br>DRE #" + esc(c.license) : "") + "</p></div>" +
+    "<div>" + phoneLink + emailLink + "</div>";
+
+  $("footer").textContent = "Listing courtesy of " + c.brokerage + (L.mls ? ", MLS# " + L.mls : "") + ". Details are believed accurate but are not guaranteed; please verify anything important.";
+})();
+
+/* ============================ QR code ============================ */
+(function qr() {
+  const box = $("qrBox"), input = $("siteUrl"), msg = $("qrMsg"), tools = $("tools");
+  const isHttp = /^https?:$/.test(location.protocol);
+  const editMode = /(^|[?&])edit(=|&|$)/.test(location.search);
+  // Seller tools show up when the file is opened locally, or on the live site with ?edit added to the address.
+  if (!isHttp || editMode) tools.hidden = false;
+
+  function normalize(raw) {
+    let v = (raw || "").trim();
+    if (!v) return null;
+    if (!/^https?:\/\//i.test(v)) v = "https://" + v;
+    try {
+      const u = new URL(v);
+      u.search = "";
+      if (!u.hash) u.hash = "#financing";
+      return u.href;
+    } catch (e) { return null; }
+  }
+
+  function draw(url) {
+    box.innerHTML = "";
+    if (!url) {
+      box.innerHTML = '<div class="qr-empty">Enter your live website address to create the QR code</div>';
+      return;
+    }
+    if (typeof QRCode === "undefined") {
+      box.innerHTML = '<div class="qr-empty">QR library could not load. Check your internet connection and reload.</div>';
+      return;
+    }
+    new QRCode(box, { text: url, width: 180, height: 180, colorDark: "#16283A", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+    msg.textContent = "QR code points to: " + url;
+  }
+
+  let inFrame = false;
+  try { inFrame = window.top !== window.self; } catch (e) { inFrame = true; }
+  const sign = document.querySelector(".sign");
+  // On a published page inside a frame, the page address is not the public link, so hide the QR until the seller enters it.
+  const initial = (isHttp && !inFrame) ? normalize(location.href) : null;
+  if (inFrame && isHttp && !editMode) sign.hidden = true;
+
+  // Small footer link that opens the seller tools on any page
+  const foot = document.getElementById("footer");
+  const toolsLink = document.createElement("a");
+  toolsLink.href = "#financing";
+  toolsLink.textContent = "Seller tools";
+  toolsLink.style.fontSize = ".8rem";
+  toolsLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    sign.hidden = false;
+    tools.hidden = false;
+    sign.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  foot.append(document.createElement("br"), toolsLink);
+  if (initial) input.value = initial.replace(/#financing$/, "");
+  draw(initial);
+
+  $("makeQr").addEventListener("click", () => {
+    const url = normalize(input.value);
+    if (!url) { msg.textContent = "That address does not look right. Try something like https://yourname.github.io/house"; draw(null); return; }
+    draw(url);
+  });
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); $("makeQr").click(); } });
+
+  $("downloadQr").addEventListener("click", () => {
+    const src = box.querySelector("canvas");
+    if (!src) { msg.textContent = "Create the QR code first, then download it."; return; }
+    const size = 1000, margin = 100;
+    const out = document.createElement("canvas");
+    out.width = out.height = size;
+    const ctx = out.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, size, size);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(src, margin, margin, size - margin * 2, size - margin * 2);
+    const a = document.createElement("a");
+    a.href = out.toDataURL("image/png");
+    a.download = "financing-qr-code.png";
+    a.click();
+    msg.textContent = "Downloaded. Print it at least 1.5 inches wide on your sign or flyer, then test-scan it. If Download does not work on your phone, take a screenshot of the QR code instead.";
+  });
+})();
+</script>
+
+</body>
+</html>
